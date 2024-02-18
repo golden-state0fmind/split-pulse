@@ -1,0 +1,7 @@
+{
+  "name": "split-pulse",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
