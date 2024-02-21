@@ -1,0 +1,15 @@
+#container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10%;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#container form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
