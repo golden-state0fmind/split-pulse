@@ -1,5 +1,5 @@
 import { createWorker } from 'tesseract.js';
-import { useState } from 'react';
+import { ErrorInfo, useState } from 'react';
 import './ReceiptContainer.css';
 import LoadingDots from './LoadingDots';
 
@@ -7,12 +7,12 @@ const ReceiptContainer = () => {
   const [imageText, setImageText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const handleImageInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageInput = async (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     const file = event.target.files?.[0];
     if (file) {
       (`Selected Image: ${file.name}`); // Sets the image name before rendering text from image
-      (async () => {
+      try {
         const worker = await createWorker('eng', 1, {
           logger: (m) => console.log(m),
         });
@@ -20,7 +20,13 @@ const ReceiptContainer = () => {
         setLoading(false);
         setImageText(ret.data.text);
         await worker.terminate();
-      })(); setImageText
+      }
+      catch (error) {
+        console.error(`${error}`);
+        setLoading(false);
+        setImageText(`${error}`);
+        alert(`${error}`);
+      }
     }
   };
   // Split OCR text into lines
