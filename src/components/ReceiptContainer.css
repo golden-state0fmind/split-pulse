@@ -12,4 +12,40 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  margin-top: 50px;
+}
+
+/* Target the file input */
+input[type="file"] {
+  /* Hide the default button */
+  display: none;
+}
+
+/* Style the custom button */
+.custom-file-upload {
+  /* Button background color */
+  background-color: #9b3bfc; /* Light purple */
+
+  /* Button text color */
+  color: white;
+
+  /* Button padding */
+  padding: 10px 15px;
+
+  /* Button border radius */
+  border-radius: 5px;
+
+  /* Button hover effect */
+  transition: background-color 0.3s ease;
+}
+
+/* Add hover effect */
+.custom-file-upload:hover {
+  background-color: #49136a; /* Darker purple */
+}
+
+/* Style the label */
+.custom-file-upload-label {
+  /* Add cursor pointer */
+  cursor: pointer;
 }
