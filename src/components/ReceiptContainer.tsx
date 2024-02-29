@@ -3,8 +3,7 @@ import { useState } from 'react';
 import './ReceiptContainer.css';
 import LoadingDots from './LoadingDots';
 import { convertPDFToPNG } from '../utilities/ImageConverter';
-
-
+import ItemContainer from './ItemContainer';
 
 const ReceiptContainer = () => {
   const [imageText, setImageText] = useState<string>('');
@@ -68,21 +67,15 @@ const ReceiptContainer = () => {
   const lines = imageText.split('\n');
   // Remove empty lines and trim whitespace
   const cleanLines = lines.filter(line => line.trim() !== '');
-  // Map over the clean lines and render each line as a separate paragraph
-  const renderedLines = cleanLines.map((line, index) => (
-    <p key={index}>{line}</p>
-  ));
 
   return (
     <div id="container">
       <form action="">
-        <label htmlFor="imageInput">Upload Receipt Image</label>
+        <label className='custom-file-upload' htmlFor="imageInput">Upload Receipt</label>
         <input id="imageInput" type="file" onChange={handleImageInput} />
       </form>
       {loading && <LoadingDots />}
-      <div className="items-list">
-        {renderedLines}
-      </div>
+      <ItemContainer lines={cleanLines} />
     </div>
   );
 };
