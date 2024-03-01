@@ -8,19 +8,26 @@ interface ItemContainerProps {
 const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
     // Initialize state with type definition
     const filteredItems = lines.filter(line => line.includes('$') && !line.toLowerCase().includes('tip') && !line.toLowerCase().includes('tax') && !line.toLowerCase().includes('total'));
-    const filteredOthers = lines.filter(line => line.includes('$') && line.toLowerCase().includes('tip') || line.includes('$') && line.toLowerCase().includes('tax') || line.includes('$') && line.toLowerCase().includes('total'))
+    const filteredOthers = lines.filter(line => line.includes('$') && line.toLowerCase().includes('tip') || line.includes('$') && line.toLowerCase().includes('tax') || line.includes('$') && line.toLowerCase().includes('total'));
+    const [items, setItems] = useState<string[]>(filteredItems);
+    // State to cache the original max numbers for each line
+    const [maxAllowedNumbers, setMaxAllowedNumbers] = useState<number[]>([]);
 
-    const [items, setItems] = useState<string[]>(filteredItems)
+    const handleNumberOfItems = (index: number, offsetIndex: number, delta: number) => {
+        const originalLine = items[index]; // Get the original line
+        const originalNumberMatch = originalLine.match(/\d+/); // Match the original number
+        if (!originalNumberMatch) return; // Return if the original number is not found
 
-    // Function to process and increment/decrement numbers in a line
-    const incrementNumber = (index: number, offsetIndex: number, delta: number) => {
-        const updatedLine = items[index].replace(/(\d+)/, (match, number) => {
-            const num = parseInt(number, 10);
-            if (!isNaN(num)) {
-                return String(num + delta);
-            }
-            return match;
-        });
+        const originalNumber = parseInt(originalNumberMatch[0], 10); // Parse the original number
+
+        // Retrieve the original max number from the cache if available, otherwise use the original number
+        const maxAllowedNumber = maxAllowedNumbers[index] ?? originalNumber;
+
+        // Calculate the updated number (limited between 0 and the maximum allowed value)
+        const updatedNumber = Math.min(Math.max(originalNumber + delta, 0), maxAllowedNumber);
+
+        // Replace the original number with the updated number in the line
+        const updatedLine = originalLine.replace(/\d+/, updatedNumber.toString());
 
         // Update state with the new line
         const updatedItems = [...items];
@@ -30,21 +37,26 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
 
     useEffect(() => {
         setItems(filteredItems)
+        // Extract and set the original max numbers
+        const originalMaxNumbers = filteredItems.map((line) => {
+            const originalNumberMatch = line.match(/\d+/);
+            return originalNumberMatch ? parseInt(originalNumberMatch[0], 10) : 0;
+        });
+        setMaxAllowedNumbers(originalMaxNumbers);
     }, [lines])
 
     return (
         <>
             <br />
+            {/* Items list with increment and decrement buttons */}
             <IonList style={{ backgroundColor: 'transparent' }}>
-                {/* Render items with logic for increment/decrement buttons */}
                 {items.map((line, index) => (
                     <IonItem key={index}>
-                        <IonCheckbox slot="start" />
+                        <IonCheckbox aria-label="Label" slot="start" />
                         <IonLabel>
                             {line}
-                            {/* Example buttons for incrementing/decrementing */}
-                            <IonButton onClick={() => incrementNumber(index, -1, 1)}>+</IonButton>
-                            <IonButton onClick={() => incrementNumber(index, -1, -1)}>-</IonButton>
+                            <IonButton onClick={() => handleNumberOfItems(index, -1, 1)}>+</IonButton>
+                            <IonButton onClick={() => handleNumberOfItems(index, -1, -1)}>-</IonButton>
                         </IonLabel>
                     </IonItem>
                 ))}
