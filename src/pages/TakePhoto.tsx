@@ -61,6 +61,7 @@ const TakePhoto = () => {
                             role: 'read',
                             icon: receipt,
                             handler: async () => {
+                                setLoading(true);
                                 try {
                                     const worker = await createWorker('eng', 1, {
                                         logger: (m) => console.log(m),
