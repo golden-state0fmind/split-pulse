@@ -16,7 +16,6 @@ const TakePhoto = () => {
     const lines = imageText.split('\n');
     // Remove empty lines and trim whitespace
     const cleanLines = lines.filter(line => line.trim() !== '');
-    console.log(cleanLines)
 
     return (
         <IonPage>
@@ -66,12 +65,10 @@ const TakePhoto = () => {
                                     const worker = await createWorker('eng', 1, {
                                         logger: (m) => console.log(m),
                                     });
-
                                     const ret = await worker.recognize(photoToDelete!.webviewPath!);
                                     setLoading(false);
                                     setImageText(ret.data.text);
                                     await worker.terminate();
-
                                 } catch (error) {
                                     console.error('Error recognizing text from image:', error);
                                     setLoading(false);
