@@ -50,7 +50,7 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
         <>
             <br />
             {/* Items list with increment and decrement buttons */}
-            <IonList style={{ backgroundColor: 'transparent' }}>
+            <IonList className='ion-padding-horizontal' style={{ backgroundColor: 'transparent' }}>
                 {items.map((line, index) => (
                     <IonItem key={index} className="item-line" >
                         <IonCheckbox aria-label="label" slot="start" />
@@ -63,12 +63,14 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
                 ))}
             </IonList>
             <br />
-            {/* Render tax, tip, and total lines */}
-            {filteredOthers.map((line, index) => (
-                <IonItem key={index}>
-                    <IonLabel>{line}</IonLabel>
-                </IonItem>
-            ))}
+            <IonList className='ion-padding-horizontal' style={{ backgroundColor: 'transparent' }}>
+                {/* Render tax, tip, and total lines */}
+                {filteredOthers.map((line, index) => (
+                    <IonItem key={index}>
+                        <IonLabel>{line}</IonLabel>
+                    </IonItem>
+                ))}
+            </IonList>
             <br />
         </>
     );
