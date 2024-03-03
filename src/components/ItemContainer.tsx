@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { IonButton, IonCheckbox, IonItem, IonLabel, IonList } from '@ionic/react';
+import "./ItemContainer.css";
 
 interface ItemContainerProps {
     lines: string[];
@@ -51,8 +52,8 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
             {/* Items list with increment and decrement buttons */}
             <IonList style={{ backgroundColor: 'transparent' }}>
                 {items.map((line, index) => (
-                    <IonItem key={index}>
-                        <IonCheckbox aria-label="Label" slot="start" />
+                    <IonItem key={index} className="item-line" >
+                        <IonCheckbox aria-label="label" slot="start" />
                         <IonLabel>
                             {line}
                             <IonButton onClick={() => handleNumberOfItems(index, -1, 1)}>+</IonButton>
