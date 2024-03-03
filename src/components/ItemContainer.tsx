@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IonButton, IonCheckbox, IonItem, IonLabel, IonList } from '@ionic/react';
+import { IonButton, IonCheckbox, IonContent, IonItem, IonLabel, IonList } from '@ionic/react';
 import "./ItemContainer.css";
 
 interface ItemContainerProps {
@@ -47,7 +47,7 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
     }, [lines])
 
     return (
-        <>
+        <div className="item-list-contianer">
             <br />
             {/* Items list with increment and decrement buttons */}
             <IonList className='ion-padding-horizontal' style={{ backgroundColor: 'transparent' }}>
@@ -72,7 +72,7 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
                 ))}
             </IonList>
             <br />
-        </>
+        </div>
     );
 };
 
