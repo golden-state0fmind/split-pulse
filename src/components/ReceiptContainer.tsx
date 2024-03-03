@@ -4,6 +4,8 @@ import './ReceiptContainer.css';
 import LoadingDots from './LoadingDots';
 import { convertPDFToPNG } from '../utilities/ImageConverter';
 import ItemContainer from './ItemContainer';
+import { IonFab, IonFabButton, IonIcon } from '@ionic/react';
+import { camera } from 'ionicons/icons';
 
 const ReceiptContainer = () => {
   const [imageText, setImageText] = useState<string>('');
@@ -70,12 +72,12 @@ const ReceiptContainer = () => {
 
   return (
     <div id="container">
+      {loading && <LoadingDots />}
+      <ItemContainer lines={cleanLines} />
       <form action="">
         <label className='custom-file-upload' htmlFor="imageInput">Upload Receipt</label>
         <input id="imageInput" type="file" onChange={handleImageInput} />
       </form>
-      {loading && <LoadingDots />}
-      <ItemContainer lines={cleanLines} />
     </div>
   );
 };
