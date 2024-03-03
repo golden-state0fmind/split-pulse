@@ -43,12 +43,12 @@ const App: React.FC = () => (
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="tab1" href="/home">
-            <IonIcon aria-hidden="true" icon={receipt} />
-            <IonLabel>Upload Receipt</IonLabel>
+            <IonIcon color="tertiary" aria-hidden="true" icon={receipt} />
+            <IonLabel color="tertiary">Upload Receipt</IonLabel>
           </IonTabButton>
           <IonTabButton tab="tab2" href="/takephoto">
-            <IonIcon icon={camera} />
-            <IonLabel>Take Photo</IonLabel>
+            <IonIcon color="tertiary" icon={camera} />
+            <IonLabel color="tertiary">Take Photo</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
