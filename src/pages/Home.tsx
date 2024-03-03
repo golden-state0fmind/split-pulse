@@ -7,13 +7,13 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Split Pulse</IonTitle>
+          <IonTitle>Upload Receipt</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Split Pulse</IonTitle>
+            <IonTitle size="large">Upload Receipt</IonTitle>
           </IonToolbar>
         </IonHeader>
         <ReceiptContainer />
