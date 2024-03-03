@@ -4,8 +4,6 @@ import './ReceiptContainer.css';
 import LoadingDots from './LoadingDots';
 import { convertPDFToPNG } from '../utilities/ImageConverter';
 import ItemContainer from './ItemContainer';
-import { IonFab, IonFabButton, IonIcon } from '@ionic/react';
-import { camera } from 'ionicons/icons';
 
 const ReceiptContainer = () => {
   const [imageText, setImageText] = useState<string>('');

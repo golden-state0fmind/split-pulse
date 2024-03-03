@@ -5,6 +5,7 @@ import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
+import { createWorker } from 'tesseract.js';
 
 export type UserPhoto = {
     filepath: string;
@@ -77,9 +78,8 @@ export function usePhotoGallery() {
             source: CameraSource.Camera,
             quality: 100,
         });
-        const fileName = Date.now() + '.png';
+        const fileName = Date.now() + '.jpeg';
         const savedFileImage = await savePicture(photo, fileName);
-        console.log(savedFileImage, '<<---------')
         const newPhotos = [savedFileImage, ...photos];
         setPhotos(newPhotos);
         Preferences.set({ key: PHOTO_STORAGE, value: JSON.stringify(newPhotos) });
