@@ -49,7 +49,7 @@ const TakePhoto = () => {
 
                 <IonFab vertical="bottom" horizontal="center" slot="fixed">
                     <IonFabButton color="tertiary" onClick={() => takePhoto()}>
-                        <IonIcon icon={camera}></IonIcon>
+                        <IonIcon icon={camera} size="large"></IonIcon>
                     </IonFabButton>
                 </IonFab>
 
