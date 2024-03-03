@@ -88,12 +88,13 @@ const Home = () => {
         <ItemContainer lines={cleanLines} />
 
         <IonFab className="ion-text-center ion-activatable ripple-parent circle" vertical="bottom" horizontal="center" slot="fixed">
-          <IonButton shape="round" color="tertiary">
-            <label className="imageUploadfLabel" htmlFor="imageInput">
-              Upload Receipt <IonIcon icon={receipt}></IonIcon>
+          <label className="imageUploadfLabel" htmlFor="imageInput">
+            <IonFabButton color="tertiary">
+              <IonIcon icon={receipt}>
+              </IonIcon>
               <input id="imageInput" type="file" onChange={handleImageInput} style={{ display: 'none' }} />
-            </label>
-          </IonButton>
+            </IonFabButton>
+          </label>
         </IonFab>
 
       </IonContent>
