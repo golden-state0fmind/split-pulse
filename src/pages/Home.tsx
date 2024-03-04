@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAlert, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
 import { receipt } from 'ionicons/icons';
 import { useState } from 'react';
@@ -10,6 +10,8 @@ import ItemContainer from '../components/ItemContainer';
 const Home = () => {
   const [imageText, setImageText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const handleImageInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
@@ -29,8 +31,8 @@ const Home = () => {
       catch (error) {
         console.error('Error recognizing text from image:', error);
         setLoading(false);
-        setImageText(`${error}`);
-        alert(`${error}`);
+        setIsError(true);
+        setErrorMessage(`Error recognizing text from image: ${file?.name}.`)
         throw error;
       }
     };
@@ -48,20 +50,25 @@ const Home = () => {
       } catch (error) {
         console.error('Error recognizing text from image:', error);
         setLoading(false);
-        setImageText(`${error}`);
-        alert(`${error}`);
+        setIsError(true);
+        setErrorMessage(`Error recognizing text from image: ${file?.name}.`)
         throw error;
       }
     };
 
     if (file?.type === 'application/pdf') {
       handlePDF(file);
-    } else if (file?.type === 'image/png') {
-      handleImage(file).catch(error => {
-        console.error('Error handling image file:', error);
-      });
+    } else if (file?.type) {
+      handleImage(file)
+        .catch(error => {
+          setIsError(true);
+          console.error('Error handling image file:', error);
+          setErrorMessage(`Error handling image file: ${file?.name}.`)
+        });
     } else {
-      console.error('Invalid file type. Please select a PDF file or an image.');
+      setIsError(true);
+      console.error(`Invalid: file type ${file?.type} not supported yet.`);
+      setErrorMessage(`Invalid: file type ${file?.type} not supported yet.`)
       setLoading(false);
     }
   };
@@ -98,6 +105,13 @@ const Home = () => {
         </IonFab>
 
       </IonContent>
+      <IonAlert
+        isOpen={isError}
+        header="ERROR"
+        message={errorMessage}
+        buttons={['OK']}
+        onDidDismiss={() => setIsError(false)}
+      ></IonAlert>
     </IonPage>
   );
 };
