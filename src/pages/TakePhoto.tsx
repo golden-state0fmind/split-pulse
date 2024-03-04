@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon, IonGrid, IonRow, IonCol, IonImg, IonActionSheet } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonFab, IonFabButton, IonIcon, IonGrid, IonRow, IonCol, IonImg, IonActionSheet, IonAlert } from '@ionic/react';
 import { camera, trash, close, receipt } from 'ionicons/icons';
 import { usePhotoGallery, UserPhoto } from '../utilities/usePhotoGallery';
 import { createWorker } from 'tesseract.js';
@@ -11,11 +11,14 @@ const TakePhoto = () => {
     const [photoToDelete, setPhotoToDelete] = useState<UserPhoto>();
     const [imageText, setImageText] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
+    const [isError, setIsError] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
 
     // Split OCR text into lines
     const lines = imageText.split('\n');
     // Remove empty lines and trim whitespace
     const cleanLines = lines.filter(line => line.trim() !== '');
+    console.log(imageText, "<<-----")
 
     return (
         <IonPage>
@@ -73,8 +76,8 @@ const TakePhoto = () => {
                                 } catch (error) {
                                     console.error('Error recognizing text from image:', error);
                                     setLoading(false);
-                                    setImageText(`${error}`);
-                                    alert(`${error}`);
+                                    setIsError(true);
+                                    setErrorMessage(`Error recognizing text format from selected image.`)
                                     throw error;
                                 }
                             }
@@ -99,6 +102,13 @@ const TakePhoto = () => {
                     onDidDismiss={() => setPhotoToDelete(undefined)}
                 />
             </IonContent>
+            <IonAlert
+                isOpen={isError}
+                header="ERROR"
+                message={errorMessage}
+                buttons={['OK']}
+                onDidDismiss={() => setIsError(false)}
+            ></IonAlert>
         </IonPage>
     );
 };
