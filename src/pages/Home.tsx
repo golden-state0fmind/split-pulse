@@ -88,7 +88,7 @@ const Home = () => {
           <IonTitle>Upload Receipt</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent >
+      <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Upload Receipt</IonTitle>

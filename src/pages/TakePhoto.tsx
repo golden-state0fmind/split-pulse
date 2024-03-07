@@ -27,7 +27,7 @@ const TakePhoto = () => {
                     <IonTitle>Take Photo</IonTitle>
                 </IonToolbar>
             </IonHeader>
-            <IonContent>
+            <IonContent fullscreen>
                 <IonHeader collapse="condense">
                     <IonToolbar>
                         <IonTitle size="large">Take Photo</IonTitle>
