@@ -81,7 +81,7 @@ const InstructionsModal = () => {
                         <h3>Example for Clarity:</h3>
                         <p>Ensure your image closely matches this image
                             <IonImg
-                                src={`dist/example_image.png`}
+                                src={`${import.meta.env.VITE_PUBLIC_URL}/example_image.png`}
                                 style={{ width: '200px', height: '200px' }}
                             />
                             for optimal results.</p>
