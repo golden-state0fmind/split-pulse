@@ -28,20 +28,20 @@ const ManualEntry = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Manually Enter Items</IonTitle>
+                    <IonTitle>Enter Items</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen>
                 <IonHeader collapse="condense">
                     <IonToolbar>
-                        <IonTitle size="large">Manually Enter Items</IonTitle>
+                        <IonTitle size="large">Enter Items</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <IonGrid>
                     <IonRow>
                         <IonList>
                             <IonItem>
-                                <IonInput label="Item Name" placeholder="Enter text"></IonInput>
+                                <IonInput label="Item Name" placeholder="Enter Item Name"></IonInput>
                             </IonItem>
 
                             <IonItem>
