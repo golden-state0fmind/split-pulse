@@ -81,7 +81,7 @@ const InstructionsModal = () => {
                         <h3>Example for Clarity:</h3>
                         <p>Ensure your image closely matches this image
                             <IonImg
-                                src={`public/assets/images/example_image.png`}
+                                src={`/assets/images/example_image.png`}
                                 style={{ width: '200px', height: '200px' }}
                             />
                             for optimal results.</p>
