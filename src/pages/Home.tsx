@@ -6,6 +6,7 @@ import { createWorker } from 'tesseract.js';
 import { convertPDFToPNG } from '../utilities/ImageConverter';
 import LoadingDots from '../components/LoadingDots';
 import ItemContainer from '../components/ItemContainer';
+import InstructionsModal from '../components/InstructionsModal';
 
 const Home = () => {
   const [imageText, setImageText] = useState<string>('');
@@ -77,6 +78,9 @@ const Home = () => {
   // Remove empty lines and trim whitespace
   const cleanLines = lines.filter(line => line.trim() !== '');
 
+  console.log(imageText, 'image text from tesseract')
+  console.log(cleanLines, 'image text after trimming the empty spaces')
+
   return (
     <IonPage>
       <IonHeader>
@@ -90,7 +94,7 @@ const Home = () => {
             <IonTitle size="large">Upload Receipt</IonTitle>
           </IonToolbar>
         </IonHeader>
-
+        <InstructionsModal />
         {loading && <LoadingDots />}
         <ItemContainer lines={cleanLines} />
 
