@@ -13,7 +13,13 @@
       "type": "image/png"
     },
     {
-      "src": "assets/icon/favicon.png",
+      "src": "assets/icon/apple-icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon/android-icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
