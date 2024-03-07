@@ -1,6 +1,11 @@
 {
   "short_name": "Split Pulse",
   "name": "Split Pulse",
+  "description": "Split Pulse makes splitting bills among friends effortless.",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#7045ff",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "assets/icon/favicon.png",
@@ -8,14 +13,10 @@
       "type": "image/x-icon"
     },
     {
-      "src": "assets/icon/favicon.png",
+      "src": "assets/icon/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  ]
 }

@@ -13,7 +13,7 @@ export default defineConfig({
     legacy(),
     VitePWA({
       registerType: 'autoUpdate',
-      injectRegister: 'auto',
+      injectRegister: 'script',
       devOptions: {
         enabled: true
       },
@@ -30,14 +30,15 @@ export default defineConfig({
         theme_color: '#7045ff',
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
+            src: "assets/icon/favicon.png",
+            sizes: "64x64 32x32 24x24 16x16",
+            type: "image/x-icon"
           },
           {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: "assets/icon/android-chrome-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable"
           }
         ]
       }
