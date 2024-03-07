@@ -1,4 +1,4 @@
-import { IonAlert, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAlert, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
 import { receipt } from 'ionicons/icons';
 import { useState } from 'react';
@@ -7,6 +7,7 @@ import { convertPDFToPNG } from '../utilities/ImageConverter';
 import LoadingDots from '../components/LoadingDots';
 import ItemContainer from '../components/ItemContainer';
 import InstructionsModal from '../components/InstructionsModal';
+import InstallButton from '../components/InstallButton';
 
 const Home = () => {
   const [imageText, setImageText] = useState<string>('');
@@ -85,7 +86,10 @@ const Home = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Upload Receipt</IonTitle>
+          <IonRow class="ion-justify-content-between">
+            <IonTitle>Upload Receipt</IonTitle>
+            <InstallButton />
+          </IonRow>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
