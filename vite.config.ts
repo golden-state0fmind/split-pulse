@@ -36,7 +36,7 @@ export default defineConfig({
             purpose: "any"
           },
           {
-            src: "assets/icon/android-chrome-192x192.png",
+            src: "assets/icon/apple-touch-icon.png",
             sizes: "144x144",
             type: "image/png",
             purpose: "any"
