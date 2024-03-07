@@ -18,14 +18,16 @@ export default defineConfig({
         enabled: true
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        clientsClaim: true,
+        skipWaiting: true
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'Split Pulse',
         short_name: 'Split Pulse',
         description: 'Split Pulse makes splitting bills among friends effortless.',
-        theme_color: '#ffffff',
+        theme_color: '#7045ff',
         icons: [
           {
             src: 'pwa-192x192.png',
