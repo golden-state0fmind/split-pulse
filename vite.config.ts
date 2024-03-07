@@ -11,9 +11,6 @@ export default defineConfig({
     react(),
     legacy()
   ],
-  define: {
-    'import.meta.env.VITE_PUBLIC_URL': JSON.stringify('https://split-pulse.vercel.app/dist/assets/example_image.png')
-  },
   test: {
     globals: true,
     environment: 'jsdom',
