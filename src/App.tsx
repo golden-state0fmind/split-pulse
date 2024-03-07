@@ -3,7 +3,8 @@ import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, Io
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import TakePhoto from './pages/TakePhoto';
-import { camera, home, receipt } from 'ionicons/icons';
+import ManualEntry from './pages/ManualEntry';
+import { camera, pencil, receipt } from 'ionicons/icons';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -37,6 +38,9 @@ const App: React.FC = () => (
           <Route exact path="/takephoto">
             <TakePhoto />
           </Route>
+          <Route exact path="/manualentry">
+            <ManualEntry />
+          </Route>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
@@ -49,6 +53,10 @@ const App: React.FC = () => (
           <IonTabButton tab="tab2" href="/takephoto">
             <IonIcon color="tertiary" icon={camera} />
             <IonLabel color="tertiary">Take Photo</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="tab3" href="/manualentry">
+            <IonIcon color="tertiary" icon={pencil} />
+            <IonLabel color="tertiary">Manual Entry</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
