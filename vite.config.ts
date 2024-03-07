@@ -32,7 +32,14 @@ export default defineConfig({
           {
             src: "assets/icon/favicon.png",
             sizes: "64x64 32x32 24x24 16x16",
-            type: "image/x-icon"
+            type: "image/x-icon",
+            purpose: "any"
+          },
+          {
+            src: "assets/icon/android-chrome-192x192.png",
+            sizes: "144x144",
+            type: "image/png",
+            purpose: "any"
           },
           {
             src: "assets/icon/android-chrome-512x512.png",
