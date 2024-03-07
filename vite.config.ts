@@ -12,7 +12,7 @@ export default defineConfig({
     legacy()
   ],
   define: {
-    'import.meta.env.VITE_PUBLIC_URL': JSON.stringify('https://split-pulse.vercel.app/assets/example_image.png')
+    'import.meta.env.VITE_PUBLIC_URL': JSON.stringify('https://split-pulse.vercel.app/dist/assets/example_image.png')
   },
   test: {
     globals: true,
