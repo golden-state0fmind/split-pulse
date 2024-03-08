@@ -1,27 +1,40 @@
-import { IonList, IonItem, IonInput, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar } from "@ionic/react"
+import { IonList, IonItem, IonInput, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonTitle, IonToolbar, IonButton } from "@ionic/react"
 import { useState } from "react";
 
 const ManualEntry = () => {
-    const [numberOfItems, setNumberOfItems] = useState<number | string>(0);
-    const [priceOfItem, setPriceOfItem] = useState<number | string>(0);
-    const [total, setTotal] = useState<number | string>(0);
+    const [items, setItems] = useState<{ itemName: string; numberOfItems: number; priceOfItem: number; total: number }[]>([]);
 
-    const handleNumberOfItemsChange = (e: CustomEvent) => {
-        const newValue = e.detail.value || '0';
-        setNumberOfItems(newValue);
-        calculateTotal(parseFloat(newValue), parseFloat(priceOfItem as string));
+    const handleNumberOfItemsChange = (e: CustomEvent, index: number) => {
+        const newValue = parseInt(e.detail.value || '0', 10);
+        updateItemValue(index, { numberOfItems: newValue });
     };
 
-    const handlePriceOfItemChange = (e: CustomEvent) => {
-        const newValue = e.detail.value || '0';
-        setPriceOfItem(newValue);
-        calculateTotal(parseFloat(numberOfItems as string), parseFloat(newValue));
+    const handlePriceOfItemChange = (e: CustomEvent, index: number) => {
+        const newValue = parseFloat(e.detail.value || '0');
+        updateItemValue(index, { priceOfItem: newValue });
     };
 
-    const calculateTotal = (numberOfItems: number, priceOfItem: number) => {
-        const newTotal = numberOfItems * priceOfItem;
-        console.log(newTotal)
-        setTotal(newTotal);
+    const updateItemValue = (index: number, updatedValues: Partial<typeof items[number]>) => {
+        setItems(prevItems => {
+            const updatedItems = [...prevItems];
+            updatedItems[index] = { ...updatedItems[index], ...updatedValues };
+            return updatedItems;
+        });
+    };
+
+    const addNewItem = () => {
+        setItems(prevItems => [
+            ...prevItems,
+            { itemName: '', numberOfItems: 0, priceOfItem: 0, total: 0 }
+        ]);
+    };
+
+    const deleteItem = (index: number) => {
+        setItems(prevItems => {
+            const updatedItems = [...prevItems];
+            updatedItems.splice(index, 1);
+            return updatedItems;
+        });
     };
 
     return (
@@ -40,41 +53,67 @@ const ManualEntry = () => {
                 <IonGrid>
                     <IonRow>
                         <IonList>
-                            <IonItem>
-                                <IonInput label="Item Name" placeholder="Enter Item Name"></IonInput>
-                            </IonItem>
+                            {items.map((item, index) => (
+                                <div key={index}>
+                                    <IonItem>
+                                        <IonInput
+                                            label="Item Name"
+                                            placeholder="Enter Item Name"
+                                            value={item.itemName}
+                                            onIonChange={(e) => updateItemValue(index, { itemName: e.detail.value || '' })}
+                                        ></IonInput>
+                                    </IonItem>
 
-                            <IonItem>
-                                <IonInput
-                                    label="Number of Item"
-                                    type="number"
-                                    placeholder="0"
-                                    min={0}
-                                    onIonChange={handleNumberOfItemsChange}
-                                ></IonInput>
-                            </IonItem>
+                                    <IonItem>
+                                        <IonInput
+                                            label="Number of Item"
+                                            inputMode="numeric"
+                                            type="number"
+                                            placeholder="0"
+                                            min={0}
+                                            value={item.numberOfItems}
+                                            onIonChange={(e) => handleNumberOfItemsChange(e, index)}
+                                        ></IonInput>
+                                    </IonItem>
 
-                            <IonItem>
-                                <IonInput
-                                    label="Price of Item"
-                                    type="number"
-                                    placeholder="0"
-                                    min={0}
-                                    onIonChange={handlePriceOfItemChange}
-                                ></IonInput>
-                            </IonItem>
+                                    <IonItem>
+                                        <IonInput
+                                            label="Price of Item"
+                                            inputMode="numeric"
+                                            type="number"
+                                            placeholder="0"
+                                            min={0}
+                                            value={item.priceOfItem}
+                                            onIonChange={(e) => handlePriceOfItemChange(e, index)}
+                                        ></IonInput>
+                                    </IonItem>
 
-                            <IonItem>
-                                <IonInput
-                                    label="Total"
-                                    type="number"
-                                    placeholder="0"
-                                    min={0}
-                                    value={total}
-                                    readonly
-                                ></IonInput>
-                            </IonItem>
-
+                                    <IonItem>
+                                        <IonInput
+                                            label="Total"
+                                            type="number"
+                                            placeholder="0"
+                                            min={0}
+                                            value={item.priceOfItem * item.numberOfItems}
+                                            readonly
+                                        ></IonInput>
+                                    </IonItem>
+                                    <IonButton
+                                        color="danger"
+                                        shape="round"
+                                        size="small"
+                                        onClick={() => deleteItem(index)}>
+                                        {`Delete ${item.itemName}`}
+                                    </IonButton>
+                                </div>
+                            ))}
+                            <IonButton
+                                color="tertiary"
+                                shape="round"
+                                size="small"
+                                onClick={addNewItem}>
+                                Add New Item
+                            </IonButton>
                         </IonList>
                     </IonRow>
                 </IonGrid>
