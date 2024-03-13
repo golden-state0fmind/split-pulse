@@ -2,7 +2,7 @@ import { IonList, IonItem, IonInput, IonContent, IonGrid, IonHeader, IonPage, Io
 import { useState } from "react";
 
 const ManualEntry = () => {
-    const [items, setItems] = useState<{ itemName: string; numberOfItems: number; priceOfItem: number; total: number }[]>([]);
+    const [items, setItems] = useState<{ itemName: string; numberOfItems: number; priceOfItem: number | string; total: number }[]>([]);
 
     const handleNumberOfItemsChange = (e: CustomEvent, index: number) => {
         const newValue = parseInt(e.detail.value || '0', 10);
@@ -10,8 +10,14 @@ const ManualEntry = () => {
     };
 
     const handlePriceOfItemChange = (e: CustomEvent, index: number) => {
-        const newValue = parseFloat(e.detail.value || '0');
-        updateItemValue(index, { priceOfItem: newValue });
+        let newValue = e.detail.value || '0';
+        // Ensure input is treated as a decimal number
+        const numericInput = newValue.replace(/[^\d]/g, '');
+        // Pad the string to ensure it has at least 3 characters (to properly insert a decimal point)
+        const paddedInput = numericInput.padStart(3, '0');
+        // Insert the decimal point two places from the end
+        const formattedInput = paddedInput.slice(0, -2) + '.' + paddedInput.slice(-2);
+        updateItemValue(index, { priceOfItem: formattedInput });
     };
 
     const updateItemValue = (index: number, updatedValues: Partial<typeof items[number]>) => {
@@ -79,10 +85,9 @@ const ManualEntry = () => {
                                     <IonItem>
                                         <IonInput
                                             label="Price of Item"
-                                            inputMode="numeric"
-                                            type="number"
-                                            placeholder="0"
-                                            min={0}
+                                            inputMode="decimal" // Changed to "decimal" for more appropriate soft keyboard
+                                            type="text" // Changed to text to allow for manual control over formatting
+                                            placeholder="0.00"
                                             value={item.priceOfItem}
                                             onIonChange={(e) => handlePriceOfItemChange(e, index)}
                                         ></IonInput>
@@ -94,7 +99,7 @@ const ManualEntry = () => {
                                             type="number"
                                             placeholder="0"
                                             min={0}
-                                            value={item.priceOfItem * item.numberOfItems}
+                                            value={Number(item.priceOfItem) * item.numberOfItems}
                                             readonly
                                         ></IonInput>
                                     </IonItem>
