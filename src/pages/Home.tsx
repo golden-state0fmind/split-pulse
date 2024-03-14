@@ -1,4 +1,4 @@
-import { IonAlert, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAlert, IonButton, IonCol, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
 import { receipt } from 'ionicons/icons';
 import { useState } from 'react';
@@ -84,33 +84,37 @@ const Home = () => {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonRow class="ion-justify-content-between">
-            <IonTitle>Upload Receipt</IonTitle>
-            <InstallButton />
-          </IonRow>
-        </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Upload Receipt</IonTitle>
+            <IonTitle size="large"><IonRow>
+              <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
+              {imageText && (
+                <IonCol>
+                  <IonButton size="small" color="tertiary" onClick={() => setImageText('')}>Clear Receipt</IonButton>
+                </IonCol>
+              )}
+            </IonRow></IonTitle>
           </IonToolbar>
         </IonHeader>
-        <InstructionsModal />
+        {imageText === '' && !isError && (
+          <InstructionsModal />
+        )}
+
         {loading && <LoadingDots />}
         <ItemContainer lines={cleanLines} />
 
-        <IonFab className="ion-text-center ion-activatable ripple-parent circle" vertical="bottom" horizontal="center" slot="fixed">
-          <IonFabButton color="tertiary">
-            <label className="imageUploadfLabel" htmlFor="imageInput">
-              <IonIcon icon={receipt} size="large">
-                <input id="imageInput" type="file" onChange={handleImageInput} style={{ display: 'none' }} />
-              </IonIcon>
-            </label>
-          </IonFabButton>
-        </IonFab>
+        {imageText === '' && !isError && (
+          <IonFab className="ion-text-center ion-activatable ripple-parent circle" vertical="bottom" horizontal="center" slot="fixed">
+            <IonFabButton color="tertiary">
+              <label className="imageUploadfLabel" htmlFor="imageInput">
+                <IonIcon icon={receipt} size="large">
+                  <input id="imageInput" type="file" onChange={handleImageInput} style={{ display: 'none' }} />
+                </IonIcon>
+              </label>
+            </IonFabButton>
+          </IonFab>
+        )}
 
       </IonContent>
       <IonAlert
