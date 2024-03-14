@@ -84,6 +84,14 @@ const Home = () => {
 
   return (
     <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <IonRow class="ion-justify-content-between">
+            <IonTitle>Upload Receipt</IonTitle>
+            <InstallButton />
+          </IonRow>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
