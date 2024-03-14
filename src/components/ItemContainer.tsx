@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { IonButton, IonCheckbox, IonCol, IonContent, IonGrid, IonItem, IonLabel, IonList, IonRow } from '@ionic/react';
+import { IonButton, IonCheckbox, IonItem, IonLabel, IonList } from '@ionic/react';
 import "./ItemContainer.css";
 
 interface ItemContainerProps {
     lines: string[];
+}
+
+interface Item {
+    name: string;
+    quantity: number;
 }
 
 const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
@@ -11,6 +16,7 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
     const filteredItems = lines.filter(line => line.includes('$') && !line.toLowerCase().includes('tip') && !line.toLowerCase().includes('tax') && !line.toLowerCase().includes('total'));
     const filteredOthers = lines.filter(line => line.includes('$') && line.toLowerCase().includes('tip') || line.includes('$') && line.toLowerCase().includes('tax') || line.includes('$') && line.toLowerCase().includes('total'));
     const [items, setItems] = useState<string[]>(filteredItems);
+    const [checkedItems, setCheckedItems] = useState<Item[]>([]);
     // State to cache the original max numbers for each line
     const [maxAllowedNumbers, setMaxAllowedNumbers] = useState<number[]>([]);
 
@@ -18,22 +24,23 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
         const originalLine = items[index]; // Get the original line
         const originalNumberMatch = originalLine.match(/\d+/); // Match the original number
         if (!originalNumberMatch) return; // Return if the original number is not found
-
         const originalNumber = parseInt(originalNumberMatch[0], 10); // Parse the original number
-
         // Retrieve the original max number from the cache if available, otherwise use the original number
         const maxAllowedNumber = maxAllowedNumbers[index] ?? originalNumber;
-
         // Calculate the updated number (limited between 0 and the maximum allowed value)
         const updatedNumber = Math.min(Math.max(originalNumber + delta, 0), maxAllowedNumber);
-
         // Replace the original number with the updated number in the line
         const updatedLine = originalLine.replace(/\d+/, updatedNumber.toString());
-
         // Update state with the new line
         const updatedItems = [...items];
         updatedItems[index] = updatedLine;
         setItems(updatedItems);
+
+        const newCheckedItems = [...checkedItems];
+        // if (newCheckedItems[index].quantity !== undefined) {
+        //     newCheckedItems[index].quantity = updatedNumber;
+        //     setCheckedItems(newCheckedItems);
+        // }
     };
 
     useEffect(() => {
@@ -44,7 +51,12 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
             return originalNumberMatch ? parseInt(originalNumberMatch[0], 10) : 0;
         });
         setMaxAllowedNumbers(originalMaxNumbers);
+        if (lines.length === 0) {
+            setCheckedItems([])
+        }
     }, [lines])
+
+    console.log(checkedItems)
 
     return (
         <div className="item-list-contianer">
@@ -53,7 +65,35 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
             <IonList className='ion-padding-horizontal' style={{ backgroundColor: 'transparent' }}>
                 {items.map((line, index) => (
                     <IonItem key={index} className="item-line">
-                        <IonCheckbox slot="start" aria-label="label" />
+                        <IonCheckbox
+                            slot="start"
+                            aria-label="label"
+                            onIonChange={(e) => {
+                                const newCheckedItems = [...checkedItems];
+                                const originalLine = items[index]; // Get the original line
+                                const originalNumberMatch = originalLine.match(/\d+/); // Match the original number
+                                if (!originalNumberMatch) return; // Return if the original number is not found
+                                const originalNumber = parseInt(originalNumberMatch[0], 10); // Parse the original number
+                                // Retrieve the original max number from the cache if available, otherwise use the original number
+                                const maxAllowedNumber = maxAllowedNumbers[index] ?? originalNumber;
+                                // Calculate the updated number (limited between 0 and the maximum allowed value)
+                                const updatedNumber = Math.min(Math.max(originalNumber, 0), maxAllowedNumber);
+                                // Replace the original number with the updated number in the line
+                                const updatedLine = originalLine.replace(/\d+/, updatedNumber.toString());
+                                const isItemIncluded = newCheckedItems.some(item => item.name === updatedLine);
+                                if (e.detail.checked) {
+                                    if (!isItemIncluded) {
+                                        newCheckedItems.push({ name: updatedLine, quantity: updatedNumber });
+                                    }
+                                } else {
+                                    const itemIndex = newCheckedItems.findIndex(item => item.name === updatedLine);
+                                    if (itemIndex !== -1) {
+                                        newCheckedItems.splice(itemIndex, 1);
+                                    }
+                                }
+                                setCheckedItems(newCheckedItems);
+                            }}
+                        />
                         <IonLabel>{line}</IonLabel>
                         <div className="ion-text-end">
                             <IonButton style={{ paddingRight: '10px' }} onClick={() => handleNumberOfItems(index, -1, 1)}>+</IonButton>
@@ -71,6 +111,18 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
                     </IonItem>
                 ))}
             </IonList>
+            <br />
+            {checkedItems.length > 0 && (
+                <IonList className='ion-padding-horizontal' style={{ backgroundColor: 'transparent' }}>
+                    {/* Render checked items */}
+                    {checkedItems.map((item, index) => (
+                        item.quantity > 0 && <IonItem key={index}>
+                            <IonLabel>{item.name}</IonLabel>
+                            <IonLabel>{item.quantity}</IonLabel>
+                        </IonItem>
+                    ))}
+                </IonList>
+            )}
             <br />
         </div>
     );
