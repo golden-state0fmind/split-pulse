@@ -27,7 +27,7 @@ export default defineConfig({
         name: 'Split Pulse',
         short_name: 'Split Pulse',
         description: 'Split Pulse makes splitting bills among friends effortless.',
-        theme_color: '#7045ff',
+        theme_color: '#78c288',
         icons: [
           {
             src: "assets/icon/favicon.png",
