@@ -69,6 +69,7 @@ const Home = () => {
           } catch (error) {
             // Handle the error gracefully
             console.error('Error running HF query:', error);
+            setLoading(false);
             setIsError(true);
             // Handle error state or provide user feedback
             setErrorMessage(`Error recognizing text from image: ${error}.`);
