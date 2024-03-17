@@ -69,7 +69,9 @@ const Home = () => {
           } catch (error) {
             // Handle the error gracefully
             console.error('Error running HF query:', error);
+            setIsError(true);
             // Handle error state or provide user feedback
+            setErrorMessage(`Error recognizing text from image: ${error}.`);
           }
         }
         if (containsDollarSign && !containsNonEnglish) {
@@ -183,7 +185,10 @@ const Home = () => {
         header="ERROR"
         message={errorMessage}
         buttons={['OK']}
-        onDidDismiss={() => setIsError(false)}
+        onDidDismiss={() => {
+          setIsError(false)
+          setImageText('')
+        }}
       ></IonAlert>
     </IonPage>
   );
