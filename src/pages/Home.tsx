@@ -72,7 +72,7 @@ const Home = () => {
             setLoading(false);
             setIsError(true);
             // Handle error state or provide user feedback
-            setErrorMessage(`Error recognizing text from image: ${error}.`);
+            setErrorMessage(`HF Error recognizing text from image: ${error}.`);
           }
         }
         if (containsDollarSign && !containsNonEnglish) {
@@ -82,7 +82,8 @@ const Home = () => {
         }
       } catch (error) {
         console.error('Error recognizing text from image:', error);
-        setIsError(true); // Assuming you have an setIsError function to handle error states
+        setLoading(false);
+        setIsError(true);
         setErrorMessage(`Error recognizing text from image: ${file?.name}.`);
       } finally {
         await worker.terminate(); // Ensure the worker is terminated after processing
