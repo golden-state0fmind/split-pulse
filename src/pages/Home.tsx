@@ -8,6 +8,9 @@ import LoadingDots from '../components/LoadingDots';
 import ItemContainer from '../components/ItemContainer';
 import InstructionsModal from '../components/InstructionsModal';
 import InstallButton from '../components/InstallButton';
+import { buildReceiptList } from '../utilities/ReceiptBuilder';
+const HF_API_KEY = import.meta.env.VITE_HF_API_KEY;
+const HF_ENDPOINT = import.meta.env.VITE_HF_ENDPOINT;
 
 const Home = () => {
   const [imageText, setImageText] = useState<string>('');
@@ -39,24 +42,63 @@ const Home = () => {
       }
     };
 
+
     const handleImage = async (file: File) => {
-      console.log(`Selected Image: ${file.name}`); // Sets the image name before rendering text from image
+      console.log(`Selected Image: ${file.name}`); // Logs the selected image name
+      setLoading(true); // Assuming you have a setLoading function to handle UI loading state
+
+      const worker = await createWorker('eng', 1, {
+        logger: (m) => console.log(m),
+      });
+
       try {
-        const worker = await createWorker('eng', 1, {
-          logger: (m) => console.log(m),
-        });
-        const ret = await worker.recognize(file);
-        setLoading(false);
-        setImageText(ret.data.text);
-        await worker.terminate();
+        const { data: { text } } = await worker.recognize(file);
+        // Here, we need to define the condition to check for non-English words.
+        // This is a placeholder condition.
+        const containsNonEnglish = text.match(/[^\x00-\x7F]+/); // Simple regex to find non-ASCII characters
+        const containsDollarSign = text.includes('$');
+
+        if (!containsDollarSign) {
+          console.log('Running HF query...');
+          try {
+            const response = await hf_AI(file);
+            console.log(response, '<<-------');
+            const hf_list = buildReceiptList(response);
+            setImageText(hf_list);
+            setLoading(false); // Reset loading state
+          } catch (error) {
+            // Handle the error gracefully
+            console.error('Error running HF query:', error);
+            // Handle error state or provide user feedback
+          }
+        }
+        if (containsDollarSign && !containsNonEnglish) {
+          console.log('Running Tesseract...')
+          setImageText(text);
+          setLoading(false); // Reset loading state
+        }
       } catch (error) {
         console.error('Error recognizing text from image:', error);
-        setLoading(false);
-        setIsError(true);
-        setErrorMessage(`Error recognizing text from image: ${file?.name}.`)
-        throw error;
+        setIsError(true); // Assuming you have an setIsError function to handle error states
+        setErrorMessage(`Error recognizing text from image: ${file?.name}.`);
+      } finally {
+        await worker.terminate(); // Ensure the worker is terminated after processing
       }
     };
+
+    async function hf_AI(file: any) {
+      const response = await fetch(
+        HF_ENDPOINT,
+        {
+          headers: { Authorization: `Bearer ${HF_API_KEY}` },
+          method: "POST",
+          body: file,
+        }
+      );
+      const result = await response.json();
+      return JSON.parse(JSON.stringify(result));
+    }
+
 
     if (file?.type === 'application/pdf') {
       handlePDF(file);
@@ -79,7 +121,7 @@ const Home = () => {
   // Remove empty lines and trim whitespace
   const cleanLines = lines.filter(line => line.trim() !== '');
 
-  console.log(imageText, 'image text from tesseract')
+  console.log(imageText, 'image text')
   console.log(cleanLines, 'image text after trimming the empty spaces')
 
   return (
@@ -87,7 +129,16 @@ const Home = () => {
       <IonHeader>
         <IonToolbar>
           <IonRow class="ion-justify-content-between">
-            <IonTitle>Upload Receipt</IonTitle>
+            <IonTitle>
+              <IonRow>
+                <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
+                {imageText && (
+                  <IonCol>
+                    <IonButton size="small" color="tertiary" onClick={() => setImageText('')}>Clear Receipt</IonButton>
+                  </IonCol>
+                )}
+              </IonRow>
+            </IonTitle>
             <InstallButton />
           </IonRow>
         </IonToolbar>
@@ -95,14 +146,16 @@ const Home = () => {
       <IonContent fullscreen>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large"><IonRow>
-              <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
-              {imageText && (
-                <IonCol>
-                  <IonButton size="small" color="tertiary" onClick={() => setImageText('')}>Clear Receipt</IonButton>
-                </IonCol>
-              )}
-            </IonRow></IonTitle>
+            <IonTitle size="large">
+              <IonRow>
+                <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
+                {imageText && (
+                  <IonCol>
+                    <IonButton size="small" color="tertiary" onClick={() => setImageText('')}>Clear Receipt</IonButton>
+                  </IonCol>
+                )}
+              </IonRow>
+            </IonTitle>
           </IonToolbar>
         </IonHeader>
         {imageText === '' && !isError && (
