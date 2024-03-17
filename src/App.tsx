@@ -35,9 +35,9 @@ const App: React.FC = () => (
           <Route exact path="/home">
             <Home />
           </Route>
-          <Route exact path="/takephoto">
+          {/* <Route exact path="/takephoto">
             <TakePhoto />
-          </Route>
+          </Route> */}
           <Route exact path="/manualentry">
             <ManualEntry />
           </Route>
@@ -50,10 +50,10 @@ const App: React.FC = () => (
             <IonIcon color="tertiary" aria-hidden="true" icon={receipt} />
             <IonLabel color="tertiary">Upload Receipt</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="tab2" href="/takephoto">
+          {/* <IonTabButton tab="tab2" href="/takephoto">
             <IonIcon color="tertiary" icon={camera} />
             <IonLabel color="tertiary">Take Photo</IonLabel>
-          </IonTabButton>
+          </IonTabButton> */}
           <IonTabButton tab="tab3" href="/manualentry">
             <IonIcon color="tertiary" icon={pencil} />
             <IonLabel color="tertiary">Manual Entry</IonLabel>

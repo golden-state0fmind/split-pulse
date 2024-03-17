@@ -59,7 +59,7 @@ const Home = () => {
         const containsDollarSign = text.includes('$');
 
         if (!containsDollarSign) {
-          console.log('Running HF query...');
+          console.log('Running HF...');
           try {
             const response = await hf_AI(file);
             console.log(response, '<<-------');
