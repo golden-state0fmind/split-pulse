@@ -9,7 +9,7 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: rgb(71, 70, 70);
+    background-color: #78c288;
     margin: 0 10px;
     animation: moveUpDown 1.5s infinite, changeOpacity 1.5s infinite;
 }
