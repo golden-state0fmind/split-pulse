@@ -18,6 +18,7 @@ const Home = () => {
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
+
   const handleImageInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
     const file = event.target.files?.[0];
@@ -132,21 +133,19 @@ const Home = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonRow class="ion-justify-content-between">
-            <IonTitle>
-              <IonRow>
-                <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
-                {imageText && (
-                  <>
-                    <IonCol>
-                      <IonButton size="small" color="danger" onClick={() => setImageText('')}>Clear Receipt</IonButton>
-                    </IonCol>
-                    <IonCol>
-                      <IonButton size="small" color="tertiary">Assign Items</IonButton>
-                    </IonCol>
-                  </>
-                )}
-              </IonRow>
+          <IonRow class="ion-justify-content-between ion-align-items-center">
+            <IonTitle style={{ padding: '0px' }}>
+              <IonCol >{imageText ? "" : "Upload Receipt"}</IonCol>
+              {imageText && (
+                <IonCol className="ion-text-end">
+                  <IonButton size="small" color="danger" onClick={() => setImageText('')}>
+                    Clear Receipt
+                  </IonButton>
+                  <IonButton size="small" color="tertiary">
+                    Assign Items
+                  </IonButton>
+                </IonCol>
+              )}
             </IonTitle>
             <InstallButton />
           </IonRow>
@@ -157,16 +156,16 @@ const Home = () => {
           <IonToolbar>
             <IonTitle size="large">
               <IonRow>
-                <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
+                <IonCol >{imageText ? "" : "Upload Receipt"}</IonCol>
                 {imageText && (
-                  <>
-                    <IonCol>
-                      <IonButton size="small" color="danger" onClick={() => setImageText('')}>Clear Receipt</IonButton>
-                    </IonCol>
-                    <IonCol>
-                      <IonButton size="small" color="tertiary">Assign Items</IonButton>
-                    </IonCol>
-                  </>
+                  <IonCol className="ion-text-end">
+                    <IonButton size="small" color="danger" onClick={() => setImageText('')}>
+                      Clear Receipt
+                    </IonButton>
+                    <IonButton size="small" color="tertiary">
+                      Assign Items
+                    </IonButton>
+                  </IonCol>
                 )}
               </IonRow>
             </IonTitle>
