@@ -137,9 +137,14 @@ const Home = () => {
               <IonRow>
                 <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
                 {imageText && (
-                  <IonCol>
-                    <IonButton size="small" color="tertiary" onClick={() => setImageText('')}>Clear Receipt</IonButton>
-                  </IonCol>
+                  <>
+                    <IonCol>
+                      <IonButton size="small" color="danger" onClick={() => setImageText('')}>Clear Receipt</IonButton>
+                    </IonCol>
+                    <IonCol>
+                      <IonButton size="small" color="tertiary">Assign Items</IonButton>
+                    </IonCol>
+                  </>
                 )}
               </IonRow>
             </IonTitle>
@@ -154,9 +159,14 @@ const Home = () => {
               <IonRow>
                 <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
                 {imageText && (
-                  <IonCol>
-                    <IonButton size="small" color="tertiary" onClick={() => setImageText('')}>Clear Receipt</IonButton>
-                  </IonCol>
+                  <>
+                    <IonCol>
+                      <IonButton size="small" color="danger" onClick={() => setImageText('')}>Clear Receipt</IonButton>
+                    </IonCol>
+                    <IonCol>
+                      <IonButton size="small" color="tertiary">Assign Items</IonButton>
+                    </IonCol>
+                  </>
                 )}
               </IonRow>
             </IonTitle>
