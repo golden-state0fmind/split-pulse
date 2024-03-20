@@ -47,7 +47,6 @@ const InstallButton: React.FC = () => {
                 }}
                 className="ion-text-center ion-activatable ripple-parent circle "
                 color="tertiary"
-                shape="round"
                 size="small"
             >
                 Install App
