@@ -64,6 +64,8 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
         }
     }, [lines])
 
+    console.log(users, `current user`)
+
     return (
         <div className="item-list-contianer">
             <br />
@@ -98,6 +100,7 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
                                     }
                                 }
                                 setCheckedItems(newCheckedItems);
+                                handleUpdateSelectedItems(1, newCheckedItems);
                             }}
                         />
                         <IonLabel>{line}</IonLabel>
@@ -118,17 +121,23 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
                 ))}
             </IonList>
             <br />
-            {checkedItems.length > 0 && (
-                <IonList className='ion-padding-horizontal' style={{ backgroundColor: 'transparent' }}>
-                    {/* Render checked items */}
-                    {checkedItems.map((item, index) => (
-                        item.quantity > 0 && <IonItem key={index}>
-                            <IonLabel>{item.name}</IonLabel>
-                            <IonLabel>{item.quantity}</IonLabel>
-                        </IonItem>
-                    ))}
-                </IonList>
-            )}
+
+            {users.map(user => (
+                <div key={user.id}>
+                    <h2>{user.name}</h2>
+                    {/* Render selected items for each user if any */}
+                    {user.selectedItems.length > 0 && (
+                        <IonList className='ion-padding-horizontal' style={{ backgroundColor: 'transparent' }}>
+                            {user.selectedItems.map((item, index) => (
+                                <IonItem key={index}>
+                                    <IonLabel>{item.name}</IonLabel>
+                                    <IonLabel>{item.quantity}</IonLabel>
+                                </IonItem>
+                            ))}
+                        </IonList>
+                    )}
+                </div>
+            ))}
             <br />
         </div>
     );
