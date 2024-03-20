@@ -43,12 +43,6 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
         const updatedItems = [...items];
         updatedItems[index] = updatedLine;
         setItems(updatedItems);
-
-        const newCheckedItems = [...checkedItems];
-        // if (newCheckedItems[index].quantity !== undefined) {
-        //     newCheckedItems[index].quantity = updatedNumber;
-        //     setCheckedItems(newCheckedItems);
-        // }
     };
 
     useEffect(() => {
@@ -63,8 +57,6 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
             setCheckedItems([])
         }
     }, [lines])
-
-    console.log(users, `current user`)
 
     return (
         <div className="item-list-contianer">
@@ -121,7 +113,6 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
                 ))}
             </IonList>
             <br />
-
             {users.map(user => (
                 <div key={user.id}>
                     <h2>{user.name}</h2>
