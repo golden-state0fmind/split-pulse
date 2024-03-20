@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { IonButton, IonCheckbox, IonItem, IonLabel, IonList } from '@ionic/react';
 import "./ItemContainer.css";
+import { selectUserItems, updateUserSelectedItems } from '../redux/assignUserSlice';
+import { useAppDispatch, useAppSelector } from '../utilities/hooks';
 
 interface ItemContainerProps {
     lines: string[];
@@ -19,6 +21,12 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
     const [checkedItems, setCheckedItems] = useState<Item[]>([]);
     // State to cache the original max numbers for each line
     const [maxAllowedNumbers, setMaxAllowedNumbers] = useState<number[]>([]);
+    const dispatch = useAppDispatch();
+    const users = useAppSelector(selectUserItems);
+
+    const handleUpdateSelectedItems = (userId: number, selectedItems: { name: string; quantity: number }[]) => {
+        dispatch(updateUserSelectedItems({ userId, selectedItems }));
+    };
 
     const handleNumberOfItems = (index: number, offsetIndex: number, delta: number) => {
         const originalLine = items[index]; // Get the original line
@@ -55,8 +63,6 @@ const ItemContainer: React.FC<ItemContainerProps> = ({ lines }) => {
             setCheckedItems([])
         }
     }, [lines])
-
-    console.log(checkedItems)
 
     return (
         <div className="item-list-contianer">
