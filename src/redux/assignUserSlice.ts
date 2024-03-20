@@ -18,7 +18,18 @@ export const userItemsSlice = createSlice({
     reducers: {
         updateUserSelectedItems: (state, action: PayloadAction<{ userId: number; selectedItems: { name: string; quantity: number }[] }>) => {
             const { userId, selectedItems } = action.payload;
-            return state.map(user => (user.id === userId ? { ...user, selectedItems } : user));
+            const existingUserIndex = state.findIndex(user => user.id === userId);
+            if (existingUserIndex !== -1) {
+                // User exists, update their selected items
+                state[existingUserIndex].selectedItems = selectedItems;
+            } else {
+                // User doesn't exist, add them to the array
+                state.push({
+                    id: userId,
+                    selectedItems,
+                    name: `user ${userId}`
+                });
+            }
         },
     },
 });
