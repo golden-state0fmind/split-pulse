@@ -16,8 +16,8 @@ export const userItemsSlice = createSlice({
     name: 'userItems',
     initialState,
     reducers: {
-        updateUserSelectedItems: (state, action: PayloadAction<{ userId: number; selectedItems: { name: string; quantity: number }[] }>) => {
-            const { userId, selectedItems } = action.payload;
+        updateUserSelectedItems: (state, action: PayloadAction<{ userId: number; selectedItems: { name: string; quantity: number }[]; userName: string }>) => {
+            const { userId, selectedItems, userName } = action.payload;
             const existingUserIndex = state.findIndex(user => user.id === userId);
             if (existingUserIndex !== -1) {
                 // User exists, update their selected items
@@ -27,14 +27,18 @@ export const userItemsSlice = createSlice({
                 state.push({
                     id: userId,
                     selectedItems,
-                    name: `user ${userId}`
+                    name: userName
                 });
             }
         },
+        resetAllUsers: (state) => {
+            return initialState;
+        },
+        // Add other reducers here as needed
     },
 });
 
-export const { updateUserSelectedItems } = userItemsSlice.actions;
+export const { updateUserSelectedItems, resetAllUsers } = userItemsSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const selectUserItems = (state: RootState) => state.userItems;
