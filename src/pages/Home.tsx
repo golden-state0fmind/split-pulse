@@ -9,6 +9,9 @@ import ItemContainer from '../components/ItemContainer';
 import InstructionsModal from '../components/InstructionsModal';
 import InstallButton from '../components/InstallButton';
 import { buildReceiptList } from '../utilities/ReceiptBuilder';
+import AssignModal from '../components/AssignModal';
+import { useAppDispatch } from '../utilities/hooks';
+import { resetAllUsers } from '../redux/assignUserSlice';
 const HF_API_KEY = import.meta.env.VITE_HF_API_KEY;
 const HF_ENDPOINT = import.meta.env.VITE_HF_ENDPOINT;
 
@@ -17,7 +20,7 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-
+  const dispatch = useAppDispatch();
 
   const handleImageInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
@@ -43,7 +46,6 @@ const Home = () => {
       }
     };
 
-
     const handleImage = async (file: File) => {
       console.log(`Selected Image: ${file.name}`); // Logs the selected image name
       setLoading(true); // Assuming you have a setLoading function to handle UI loading state
@@ -63,7 +65,7 @@ const Home = () => {
           console.log('Running HF...');
           try {
             const response = await hf_AI(file);
-            console.log(response, '<<-------');
+            console.log(response, '<<-------HF response');
             const hf_list = buildReceiptList(response);
             setImageText(hf_list);
             setLoading(false); // Reset loading state
@@ -126,9 +128,6 @@ const Home = () => {
   // Remove empty lines and trim whitespace
   const cleanLines = lines.filter(line => line.trim() !== '');
 
-  console.log(imageText, 'image text')
-  console.log(cleanLines, 'image text after trimming the empty spaces')
-
   return (
     <IonPage>
       <IonHeader>
@@ -138,12 +137,13 @@ const Home = () => {
               <IonCol >{imageText ? "" : "Upload Receipt"}</IonCol>
               {imageText && (
                 <IonCol className="ion-text-end">
-                  <IonButton size="small" color="danger" onClick={() => setImageText('')}>
+                  <IonButton size="small" color="danger" onClick={() => {
+                    setImageText('')
+                    dispatch(resetAllUsers())
+                  }}>
                     Clear Receipt
                   </IonButton>
-                  <IonButton size="small" color="tertiary">
-                    Assign Items
-                  </IonButton>
+                  <AssignModal lines={cleanLines} />
                 </IonCol>
               )}
             </IonTitle>
@@ -155,17 +155,18 @@ const Home = () => {
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">
-              <IonRow>
-                <IonCol >{imageText ? "" : "Upload Receipt"}</IonCol>
+              <IonRow className="ion-align-items-center">
+                <IonCol>{imageText ? "" : "Upload Receipt"}</IonCol>
                 {imageText && (
-                  <IonCol className="ion-text-end">
-                    <IonButton size="small" color="danger" onClick={() => setImageText('')}>
+                  <>
+                    <IonButton size="small" color="danger" onClick={() => {
+                      setImageText('')
+                      dispatch(resetAllUsers())
+                    }}>
                       Clear Receipt
                     </IonButton>
-                    <IonButton size="small" color="tertiary">
-                      Assign Items
-                    </IonButton>
-                  </IonCol>
+                    <AssignModal lines={cleanLines} />
+                  </>
                 )}
               </IonRow>
             </IonTitle>
