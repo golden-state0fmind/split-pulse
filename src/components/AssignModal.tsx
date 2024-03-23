@@ -25,7 +25,7 @@ interface Item {
 }
 
 type PricePerItemStore = {
-    [key: number]: number;
+    [index: number]: { pricePerItem: number; itemName: string };
 };
 
 const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
@@ -36,6 +36,7 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
     const [checkedItems, setCheckedItems] = useState<Item[]>([]);
     // State to cache the original max numbers for each line
     const [maxAllowedNumbers, setMaxAllowedNumbers] = useState<number[]>([]);
+    const [updatedPricePerItemStore, setUpdatedPricePerItemStore] = useState<PricePerItemStore>({});
     const [userName, setUserName] = useState<string>('');
     const dispatch = useAppDispatch();
     const modal = useRef<HTMLIonModalElement>(null);
@@ -77,24 +78,7 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
         dispatch(updateUserSelectedItems({ userId, selectedItems, userName }));
     };
 
-    const pricePerItemStore: PricePerItemStore = {};
-
     const handleNumberOfItems = (index: number, offsetIndex: number, delta: number) => {
-        // const originalLine = items[index]; // Get the original line
-        // const originalNumberMatch = originalLine.match(/\d+/); // Match the original number
-        // if (!originalNumberMatch) return; // Return if the original number is not found
-        // const originalNumber = parseInt(originalNumberMatch[0], 10); // Parse the original number
-        // // Retrieve the original max number from the cache if available, otherwise use the original number
-        // const maxAllowedNumber = maxAllowedNumbers[index] ?? originalNumber;
-        // // Calculate the updated number (limited between 0 and the maximum allowed value)
-        // const updatedNumber = Math.min(Math.max(originalNumber + delta, 0), maxAllowedNumber);
-        // // Replace the original number with the updated number in the line
-        // const updatedLine = originalLine.replace(/\d+/, updatedNumber.toString());
-        // // Update state with the new line
-
-        // const updatedItems = [...items];
-        // updatedItems[index] = updatedLine;
-        // setItems(updatedItems);
         const originalLine = items[index];
         const originalNumberMatch = originalLine.match(/\d+/);
         const originalPriceMatch = originalLine.match(/\$\d+(\.\d{2})?/);
@@ -104,27 +88,20 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
         const originalNumber = parseInt(originalNumberMatch[0], 10);
         let originalPrice = parseFloat(originalPriceMatch[0].substring(1));
 
-
-        if (!pricePerItemStore.hasOwnProperty(index)) {
-            pricePerItemStore[index] = originalPrice / originalNumber;
-        }
-
         const maxAllowedNumber = maxAllowedNumbers[index] ?? originalNumber;
         const updatedNumber = Math.min(Math.max(originalNumber + delta, 0), maxAllowedNumber);
 
         let finalPrice = originalPrice;
         if (updatedNumber !== maxAllowedNumber) {
-
-            const pricePerItem = pricePerItemStore[index];
+            const pricePerItem = updatedPricePerItemStore[index].pricePerItem;
             finalPrice = pricePerItem * updatedNumber;
         } else {
-
-            finalPrice = pricePerItemStore[index] * maxAllowedNumber;
+            finalPrice = updatedPricePerItemStore[index].pricePerItem * maxAllowedNumber;
         }
 
         const updatedLine = originalLine
-            .replace(/\d+/, updatedNumber.toString())
-            .replace(/\$\d+(\.\d{2})?/, `$${finalPrice.toFixed(2)}`);
+            .replace(/^\d+/, updatedNumber.toString())
+            .replace(/\$\d{1,4}\.\d{2}/, `$${finalPrice.toFixed(2)}`);
 
         const updatedItems = [...items];
         updatedItems[index] = updatedLine;
@@ -142,6 +119,25 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
         if (lines.length === 0) {
             setCheckedItems([])
         }
+
+        // Calculate and update price per item store
+        const updatedPricePerItemStore: PricePerItemStore = {};
+        lines.forEach((originalLine, index) => {
+            const originalNumberMatch = originalLine.match(/\d+/);
+            const originalPriceMatch = originalLine.match(/\$\d+(\.\d{2})?/);
+
+            if (originalNumberMatch && originalPriceMatch) {
+                const originalNumber = parseInt(originalNumberMatch[0], 10);
+                const originalPrice = parseFloat(originalPriceMatch[0].substring(1));
+                const itemName = originalLine.replace(/\d+/g, '').trim();
+
+                updatedPricePerItemStore[index] = {
+                    pricePerItem: originalPrice / originalNumber,
+                    itemName: itemName
+                };
+            }
+        });
+        setUpdatedPricePerItemStore(updatedPricePerItemStore);
     }, [lines])
 
     return (
