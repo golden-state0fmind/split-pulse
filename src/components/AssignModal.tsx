@@ -13,7 +13,8 @@ import {
     IonInput,
 } from '@ionic/react';
 import { updateUserSelectedItems } from '../redux/assignUserSlice';
-import { useAppDispatch } from '../utilities/hooks';
+import { useAppDispatch, useAppSelector } from '../utilities/hooks';
+import { selectPricePerItemStore } from '../redux/pricePerItemSlice';
 
 interface AssignModalProps {
     lines: string[];
@@ -24,10 +25,6 @@ interface Item {
     quantity: number;
 }
 
-type PricePerItemStore = {
-    [index: number]: { pricePerItem: number; itemName: string };
-};
-
 const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
     // Initialize state with type definition
     const filteredItems = lines.filter(line => line.includes('$') && !line.toLowerCase().includes('tip') && !line.toLowerCase().includes('tax') && !line.toLowerCase().includes('total'));
@@ -36,10 +33,10 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
     const [checkedItems, setCheckedItems] = useState<Item[]>([]);
     // State to cache the original max numbers for each line
     const [maxAllowedNumbers, setMaxAllowedNumbers] = useState<number[]>([]);
-    const [updatedPricePerItemStore, setUpdatedPricePerItemStore] = useState<PricePerItemStore>({});
     const [userName, setUserName] = useState<string>('');
     const dispatch = useAppDispatch();
     const modal = useRef<HTMLIonModalElement>(null);
+    const pricePerItemStore = useAppSelector(selectPricePerItemStore);
 
     const handleInputChange = (event: CustomEvent) => {
         setUserName(event.detail.value as string);
@@ -93,15 +90,15 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
 
         let finalPrice = originalPrice;
         if (updatedNumber !== maxAllowedNumber) {
-            const pricePerItem = updatedPricePerItemStore[index].pricePerItem;
+            const pricePerItem = pricePerItemStore[index].pricePerItem;
             finalPrice = pricePerItem * updatedNumber;
         } else {
-            finalPrice = updatedPricePerItemStore[index].pricePerItem * maxAllowedNumber;
+            finalPrice = pricePerItemStore[index].pricePerItem * maxAllowedNumber;
         }
 
         const updatedLine = originalLine
             .replace(/^\d+/, updatedNumber.toString())
-        // .replace(/\$\d{1,4}\.\d{2}/, `$${finalPrice.toFixed(2)}`);
+            .replace(/\$\d{1,4}\.\d{2}/, `$${finalPrice.toFixed(2)}`);
 
         const updatedItems = [...items];
         updatedItems[index] = updatedLine;
@@ -119,25 +116,6 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
         if (lines.length === 0) {
             setCheckedItems([])
         }
-
-        // Calculate and update price per item store
-        const updatedPricePerItemStore: PricePerItemStore = {};
-        lines.forEach((originalLine, index) => {
-            const originalNumberMatch = originalLine.match(/\d+/);
-            const originalPriceMatch = originalLine.match(/\$\d+(\.\d{2})?/);
-
-            if (originalNumberMatch && originalPriceMatch) {
-                const originalNumber = parseInt(originalNumberMatch[0], 10);
-                const originalPrice = parseFloat(originalPriceMatch[0].substring(1));
-                const itemName = originalLine.replace(/\d+/g, '').trim();
-
-                updatedPricePerItemStore[index] = {
-                    pricePerItem: originalPrice / originalNumber,
-                    itemName: itemName
-                };
-            }
-        });
-        setUpdatedPricePerItemStore(updatedPricePerItemStore);
     }, [lines])
 
     return (
