@@ -99,7 +99,7 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
         const updatedLine = originalLine.replace(/^\d+/, updatedNumber.toString());
 
         const updatedItems = [...items];
-        updatedItems[index] = updatedLine.replace(/\$\d{1,4}\.\d{2}/, `$${finalPrice.toFixed(2)}`);
+        updatedItems[index] = updatedLine.replace(/\$.*/, `$${finalPrice.toFixed(2)}`);
         setItems(updatedItems);
     };
 
