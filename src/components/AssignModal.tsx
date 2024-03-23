@@ -102,8 +102,7 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
         const updatedLine = originalLine
             .replace(/^\d+/, updatedNumber.toString())
             .replace(/\$\d{1,4}\.\d{2}/, `$${finalPrice.toFixed(2)}`);
-        console.log(updatedLine)
-        alert(updatedLine)
+
         const updatedItems = [...items];
         updatedItems[index] = updatedLine;
         setItems(updatedItems);
@@ -207,7 +206,7 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
                                 <IonLabel>{line}</IonLabel>
                                 <div className="ion-text-end">
                                     <IonButton style={{ paddingRight: '10px' }} onClick={() => handleNumberOfItems(index, -1, 1)}>+</IonButton>
-                                    <IonButton onClick={() => handleNumberOfItems(index, -1, -1)}>-</IonButton>
+                                    <IonButton onClick={() => { handleNumberOfItems(index, -1, -1), alert('click') }}>-</IonButton>
                                 </div>
                             </IonItem>
                         ))}
