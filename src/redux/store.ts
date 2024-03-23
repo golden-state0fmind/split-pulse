@@ -1,9 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { configureStore } from '@reduxjs/toolkit';
 import userItemsReducer from './assignUserSlice';
+import pricePerItemReducer from './pricePerItemSlice';
 
 const store = configureStore({
     reducer: {
-        userItems: userItemsReducer
+        userItems: userItemsReducer,
+        pricePerItem: pricePerItemReducer
     }
 })
 
