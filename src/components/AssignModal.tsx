@@ -96,12 +96,10 @@ const AssignModal: React.FC<AssignModalProps> = ({ lines }) => {
             finalPrice = pricePerItemStore[index].pricePerItem * maxAllowedNumber;
         }
 
-        const updatedLine = originalLine
-            .replace(/^\d+/, updatedNumber.toString())
-            .replace(/\$\d{1,4}\.\d{2}/, `$${finalPrice.toFixed(2)}`);
+        const updatedLine = originalLine.replace(/^\d+/, updatedNumber.toString());
 
         const updatedItems = [...items];
-        updatedItems[index] = updatedLine;
+        updatedItems[index] = updatedLine.replace(/\$\d{1,4}\.\d{2}/, `$${finalPrice.toFixed(2)}`);
         setItems(updatedItems);
     };
 
