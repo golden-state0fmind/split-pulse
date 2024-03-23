@@ -1,7 +1,7 @@
 import { IonAlert, IonButton, IonCol, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/react';
 import './Home.css';
 import { receipt } from 'ionicons/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createWorker } from 'tesseract.js';
 import { convertPDFToPNG } from '../utilities/ImageConverter';
 import LoadingDots from '../components/LoadingDots';
@@ -12,6 +12,7 @@ import { buildReceiptList } from '../utilities/ReceiptBuilder';
 import AssignModal from '../components/AssignModal';
 import { useAppDispatch } from '../utilities/hooks';
 import { resetAllUsers } from '../redux/assignUserSlice';
+import { updatePricePerItemStore } from '../redux/pricePerItemSlice';
 const HF_API_KEY = import.meta.env.VITE_HF_API_KEY;
 const HF_ENDPOINT = import.meta.env.VITE_HF_ENDPOINT;
 
@@ -127,6 +128,10 @@ const Home = () => {
   const lines = imageText.split('\n');
   // Remove empty lines and trim whitespace
   const cleanLines = lines.filter(line => line.trim() !== '');
+
+  useEffect(() => {
+    dispatch(updatePricePerItemStore({ lines: cleanLines }))
+  }, [cleanLines])
 
   return (
     <IonPage>
